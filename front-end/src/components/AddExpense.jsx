@@ -1,77 +1,76 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Container, Typography, TextField, Button, Box } from '@mui/material';
 
 const AddExpense = () => {
   const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('Expense');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState('expense'); // Default to 'expense'
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleAddExpense = async (e) => {
     e.preventDefault();
-
-    axios.post('/api/expenses', { amount, date, description, type })
-      .then(response => {
-        // Handle success
-        console.log(response.data);
-        // Redirect or show success message
-      })
-      .catch(error => {
-        // Handle error
-        console.error('There was an error adding the expense!', error);
+    try {
+      await axios.post('http://localhost:1880/add_expense', {
+        Amount: amount,
+        Category: category,
+        Date: date,
+        Description: description,
+        Email: 'user-email' // Replace with the actual email or retrieve from state
       });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Failed to add expense', error);
+    }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Add Expense
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Type</InputLabel>
-            <Select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              label="Type"
-              required
-            >
-              <MenuItem value="expense">Expense</MenuItem>
-              <MenuItem value="income">Income</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="Amount"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            required
-          />
-          <TextField
-            label="Date"
-            type="date"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-          <TextField
-            label="Description"
-            fullWidth
-            margin="normal"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <Button type="submit" variant="contained" sx={{ mt: 2, backgroundColor: '#4CAF50', color: '#fff' }}>
-            Add
-          </Button>
-        </Box>
+    <Container>
+      <Typography variant="h4" gutterBottom>Add Expense</Typography>
+      <Box component="form" onSubmit={handleAddExpense}>
+        <TextField
+          label="Amount"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <TextField
+          label="Category"
+          select
+          fullWidth
+          margin="normal"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          SelectProps={{
+            native: true,
+          }}
+        >
+          <option value="Income">Income</option>
+          <option value="Expense">Expense</option>
+        </TextField>
+        <TextField
+          label="Date"
+          type="date"
+          fullWidth
+          margin="normal"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          label="Description"
+          fullWidth
+          margin="normal"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Button type="submit" variant="contained" color="primary">Add Expense</Button>
       </Box>
     </Container>
   );

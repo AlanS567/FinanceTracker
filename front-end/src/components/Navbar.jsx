@@ -12,7 +12,7 @@ const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
         <Box sx={{ display: 'flex', gap: 2 }}>
           {!showDashboardLinks && !showAdminLinks ? (
             <>
-              <Button color="inherit" component={Link} to="/">
+              <Button color="inherit" component={Link} to="/login">
                 Login
               </Button>
               <Button color="inherit" component={Link} to="/signup">
@@ -34,19 +34,19 @@ const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
                 Logout
               </Button>
             </>
-          ) : (
+          ) : showAdminLinks ? (
             <>
               <Button color="inherit" component={Link} to="/adminuser">
-                Manage Users
+                Admin Users
               </Button>
               <Button color="inherit" component={Link} to="/adminexpense">
-                Manage Expenses
+                Admin Expenses
               </Button>
               <Button color="inherit" onClick={handleLogout}>
-                Admin Logout
+                Logout
               </Button>
             </>
-          )}
+          ) : null}
         </Box>
       </Toolbar>
     </AppBar>

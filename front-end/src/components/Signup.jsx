@@ -1,69 +1,87 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Container, TextField, Button, Typography, Box } from '@mui/material';
 
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('/api/signup', { name, email, password });
-      navigate('/login');
-    } catch (err) {
-      setError('Sign Up Failed: ' + (err.response?.data?.message || err.message));
-    }
-  };
+    const handleSignup = async () => {
+        try {
+            const response = await axios.post('http://localhost:1880/add_user', { Email: email, Password: password, Username: username });
+            if (response.data.message === "data added!!") {
+                navigate('/');
+            } else {
+                setError('Signup failed. This email may already exist.');
+            }
+        } catch (err) {
+            setError('An error occurred. Please try again.');
+        }
+    };
 
-  return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 15 }}>
-        <Typography variant="h4" gutterBottom>
-          Sign Up
-        </Typography>
-        {error && <Typography color="error">{error}</Typography>}
-        <Box component="form" onSubmit={handleSignup}>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="normal"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            sx={{ borderRadius: '8px' }}
-          />
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            margin="normal"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            sx={{ borderRadius: '8px' }}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            margin="normal"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{ borderRadius: '8px' }}
-          />
-          <Button type="submit" variant="contained" sx={{ backgroundColor: '#4CAF50', color: '#fff' }}>
-            Sign Up
-          </Button>
-        </Box>
-      </Box>
-    </Container>
-  );
+    return (
+        <Container component="main" maxWidth="xs">
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: 8,
+                    padding: 3,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    backgroundColor: '#fff',
+                }}
+            >
+                <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
+                    Signup
+                </Typography>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    variant="outlined"
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    variant="outlined"
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    variant="outlined"
+                />
+                <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginTop: 2 }}
+                    onClick={handleSignup}
+                >
+                    Signup
+                </Button>
+                {error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
+            </Box>
+        </Container>
+    );
 };
 
 export default Signup;
