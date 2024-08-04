@@ -28,6 +28,7 @@ const AddExpense = () => {
 
   return (
     <Container>
+      <br /><br /><br />
       <Typography variant="h4" gutterBottom>Add Expense</Typography>
       <Box component="form" onSubmit={handleAddExpense}>
         <TextField

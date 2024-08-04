@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, Box } from '@mui/material';
+import { Container, Typography, Button, Box, List, ListItem, ListItemText } from '@mui/material';
 import axios from 'axios';
-import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
 
 const Dashboard = () => {
   const [expenses, setExpenses] = useState([]);
@@ -33,25 +31,38 @@ const Dashboard = () => {
     setExpenseTotal(totalExpense);
   };
 
-  const data = {
-    labels: ['Income', 'Expense'],
-    datasets: [
-      {
-        label: 'Amount',
-        data: [income, expenseTotal],
-        backgroundColor: ['rgba(75,192,192,0.4)', 'rgba(255,99,132,0.4)'],
-        borderColor: ['rgba(75,192,192,1)', 'rgba(255,99,132,1)'],
-        borderWidth: 1
-      }
-    ]
-  };
+  // Separate recent income and expenses
+  const recentIncome = expenses.filter(item => item.Category === 'Income').slice(-5).reverse();
+  const recentExpenses = expenses.filter(item => item.Category === 'Expense').slice(-5).reverse();
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Dashboard</Typography>
+      <br /><br />
       <Typography variant="h6">Total Income: ₹{income}</Typography>
       <Typography variant="h6">Total Expenses: ₹{expenseTotal}</Typography>
-      <Line data={data} />
+
+      <Box mt={4}>
+        <Typography variant="h6">Recent Income</Typography>
+        <List>
+          {recentIncome.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={item.Description} secondary={`₹${item.Amount}`} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Box mt={4}>
+        <Typography variant="h6">Recent Expenses</Typography>
+        <List>
+          {recentExpenses.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={item.Description} secondary={`₹${item.Amount}`} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
       <Box mt={2}>
         <Button variant="contained" color="primary" href="/add">Add Expense</Button>
         <Button variant="contained" color="secondary" href="/manage">Manage Expenses</Button>

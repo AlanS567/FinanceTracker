@@ -28,6 +28,7 @@ const AdminExpenseManage = () => {
 
   return (
     <Container>
+      <br /><br />
       <Typography variant="h4" gutterBottom>
         Manage Expenses
       </Typography>

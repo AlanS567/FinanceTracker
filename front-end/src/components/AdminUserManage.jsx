@@ -29,6 +29,7 @@ const AdminUserManage = () => {
 
   return (
     <Container>
+      <br /><br />
       <Typography variant="h4" gutterBottom>
         Manage Users
       </Typography>

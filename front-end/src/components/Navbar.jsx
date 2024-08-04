@@ -1,17 +1,31 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    navigate('/login');
+  };
+
   return (
     <AppBar position="fixed" sx={{ backgroundColor: '#333' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'left' }}>
-          FinanceTracker
-        </Typography>
+      <Toolbar sx={{ justifyContent: 'space-between', padding: '0 16px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img src={logo} alt="FinanceTracker Logo" style={{ height: 40 }} />
+          <Typography variant="h6" sx={{ color: '#fff', marginLeft: 2 }}>
+            FinanceTracker
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
           {!showDashboardLinks && !showAdminLinks ? (
             <>
+              <Button color="inherit" component={Link} to="/">
+                Home
+              </Button>
               <Button color="inherit" component={Link} to="/login">
                 Login
               </Button>
@@ -30,7 +44,7 @@ const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
               <Button color="inherit" component={Link} to="/manage">
                 Manage
               </Button>
-              <Button color="inherit" onClick={handleLogout}>
+              <Button color="inherit" onClick={handleLogoutClick}>
                 Logout
               </Button>
             </>
@@ -42,7 +56,7 @@ const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
               <Button color="inherit" component={Link} to="/adminexpense">
                 Admin Expenses
               </Button>
-              <Button color="inherit" onClick={handleLogout}>
+              <Button color="inherit" onClick={handleLogoutClick}>
                 Logout
               </Button>
             </>
@@ -54,4 +68,3 @@ const Navbar = ({ showDashboardLinks, showAdminLinks, handleLogout }) => {
 };
 
 export default Navbar;
-
