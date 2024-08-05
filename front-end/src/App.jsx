@@ -10,6 +10,7 @@ import ManageExpense from './components/ManageExpense';
 import AddExpense from './components/AddExpense';
 import AdminUserManage from './components/AdminUserManage';
 import AdminExpenseManage from './components/AdminExpenseManage';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +33,7 @@ function App() {
         <Route path='/manage' element={<ManageExpense />} />
         <Route path='/adminuser' element={<AdminUserManage />} />
         <Route path='/adminexpense' element={<AdminExpenseManage />} />
+        <Route path='/admindash' element={<AdminDashboard />} />
       </Routes>
     </>
   );

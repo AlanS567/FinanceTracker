@@ -14,7 +14,7 @@ const Signup = () => {
         try {
             const response = await axios.post('http://localhost:1880/add_user', { Email: email, Password: password, Username: username });
             if (response.data.message === "data added!!") {
-                navigate('/');
+                navigate('/login');
             } else {
                 setError('Signup failed. This email may already exist.');
             }
