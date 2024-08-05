@@ -18,11 +18,11 @@ const Login = ({ setIsLoggedIn, setIsAdminLoggedIn }) => {
       });
       if (response.data.status === "ok") {
         localStorage.setItem("token", response.data.token);
-        setIsLoggedIn(true);
         if (email === "admin567@gmail.com" && password === "admin567") {
-          // setIsAdminLoggedIn(true);
+          setIsAdminLoggedIn(true);
           navigate("/admindash");
         } else {
+          setIsLoggedIn(true);
           navigate("/dashboard");
         }
       } else {

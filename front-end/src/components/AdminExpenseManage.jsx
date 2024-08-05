@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 
 const AdminExpenseManage = () => {
   const [expenses, setExpenses] = useState([]);
@@ -36,35 +37,44 @@ const AdminExpenseManage = () => {
   };
 
   return (
-    <Container>
-      <br />
-      <br />
-      <Typography variant="h4" gutterBottom>
+    <Container sx={{ marginTop: '80px' }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{
+          fontWeight: 'bold',
+          marginBottom: 4,
+          color: 'primary.main',
+          textAlign: 'center',
+        }}
+      >
         Manage Expenses
       </Typography>
-      <List>
+      <Grid container spacing={3}>
         {expenses.map((expense) => (
-          <ListItem
-            key={expense._id}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => handleDelete(expense._id)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            }
-          >
-            <ListItemText
-              primary={`₹${expense.Amount}`}
-              secondary={`${expense.Category} - ${
-                expenses.Description
-              } on ${new Date(expense.Date).toLocaleDateString()}`}
-            />
-          </ListItem>
+          <Grid item xs={12} sm={6} md={4} key={expense._id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  ₹{expense.Amount}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {expense.Category} - {expense.Description} on {new Date(expense.Date).toLocaleDateString()}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => handleDelete(expense._id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </Grid>
         ))}
-      </List>
+      </Grid>
     </Container>
   );
 };

@@ -36,56 +36,64 @@ const AddExpense = () => {
 
   return (
     <Container>
-      <br />
-      <br />
-      <br />
-      <Typography variant="h4" gutterBottom>
-        Add Expense
-      </Typography>
-      <Box component="form" onSubmit={handleAddExpense}>
-        <TextField
-          label="Amount"
-          type="number"
-          fullWidth
-          margin="normal"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <TextField
-          label="Category"
-          select
-          fullWidth
-          margin="normal"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          SelectProps={{
-            native: true,
+      <Box sx={{ mt: 8 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            mb: 4, // Margin bottom to create space below the heading
+            fontWeight: 'bold',
+            textAlign: 'center',
+            color: '#1976d2', // Adjust color to your preference
           }}
         >
-          <option value="Income">Income</option>
-          <option value="Expense">Expense</option>
-        </TextField>
-        <TextField
-          label="Date"
-          type="date"
-          fullWidth
-          margin="normal"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <TextField
-          label="Description"
-          fullWidth
-          margin="normal"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <Button type="submit" variant="contained" color="primary">
           Add Expense
-        </Button>
+        </Typography>
+        <Box component="form" onSubmit={handleAddExpense}>
+          <TextField
+            label="Amount"
+            type="number"
+            fullWidth
+            margin="normal"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+          <TextField
+            label="Category"
+            select
+            fullWidth
+            margin="normal"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </TextField>
+          <TextField
+            label="Date"
+            type="date"
+            fullWidth
+            margin="normal"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Description"
+            fullWidth
+            margin="normal"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+            Add Expense
+          </Button>
+        </Box>
       </Box>
     </Container>
   );

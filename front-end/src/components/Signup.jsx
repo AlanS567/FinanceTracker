@@ -18,7 +18,7 @@ const Signup = () => {
         Username: username,
       });
       if (response.data.message === "data added!!") {
-        navigate("/");
+        navigate("/login");
         localStorage.setItem("token", response.data.token);
       } else {
         setError("Signup failed. This email may already exist.");

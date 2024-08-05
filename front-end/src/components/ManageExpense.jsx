@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Typography, List, ListItem, ListItemText, Button, IconButton, Dialog, 
-  DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 
 const ManageExpense = () => {
@@ -16,7 +29,6 @@ const ManageExpense = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const email = "user@example.com"; // Replace this with dynamic email or user info
         const response = await axios.get("http://localhost:1880/view_expense", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -63,7 +75,6 @@ const ManageExpense = () => {
           Category: updatedCategory,
           Date: updatedDate,
           Description: updatedDescription,
-          // Email: selectedExpense.Email,
         }
       );
       setExpenses(
@@ -87,28 +98,47 @@ const ManageExpense = () => {
 
   return (
     <Container>
-      <br />
-      <br />
-      <Typography variant="h4" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{
+          marginTop: 10, // Adjust this value to move the heading down
+          marginBottom: 4,
+          fontWeight: 'bold',
+          textAlign: 'center',
+          color: '#1976d2', // Adjust color to your preference
+        }}
+      >
         Manage Expenses
       </Typography>
-      <List>
+      <Grid container spacing={2}>
         {expenses.map((expense) => (
-          <ListItem key={expense._id}>
-            <ListItemText
-              primary={`Amount: ${expense.Amount} ₹`}
-              secondary={`Category: ${expense.Category}, Date: ${expense.Date}, Description: ${expense.Description}`}
-            />
-            <IconButton onClick={() => handleOpenDialog(expense)}>
-              <Edit />
-            </IconButton>
-            <IconButton onClick={() => handleDelete(expense._id)}>
-              <Delete />
-            </IconButton>
-          </ListItem>
+          <Grid item xs={12} sm={6} md={4} key={expense._id}>
+            <Card variant="outlined">
+              <CardContent>
+                <Typography variant="h6">Amount: ₹{expense.Amount}</Typography>
+                <Typography variant="body1">Category: {expense.Category}</Typography>
+                <Typography variant="body1">Date: {expense.Date}</Typography>
+                <Typography variant="body1">Description: {expense.Description}</Typography>
+              </CardContent>
+              <CardActions>
+                <IconButton onClick={() => handleOpenDialog(expense)}>
+                  <Edit />
+                </IconButton>
+                <IconButton onClick={() => handleDelete(expense._id)}>
+                  <Delete />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </Grid>
         ))}
-      </List>
-      <Button variant="contained" color="primary" href="/add">
+      </Grid>
+      <Button
+        variant="contained"
+        color="primary"
+        href="/add"
+        sx={{ marginTop: 2 }}
+      >
         Add New Expense
       </Button>
       <Dialog open={open} onClose={handleCloseDialog}>

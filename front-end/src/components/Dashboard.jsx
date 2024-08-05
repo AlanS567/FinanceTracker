@@ -4,9 +4,9 @@ import {
   Typography,
   Button,
   Box,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
+  Card,
+  CardContent,
 } from "@mui/material";
 import axios from "axios";
 
@@ -21,7 +21,7 @@ const Dashboard = () => {
         const response = await axios.get("http://localhost:1880/view_expense", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
-          }, // Replace with the actual email or retrieve from state
+          },
         });
         setExpenses(response.data);
         calculateTotals(response.data);
@@ -56,42 +56,65 @@ const Dashboard = () => {
     .reverse();
 
   return (
-    <Container>
-      <br />
-      <br />
-      <Typography variant="h6">Total Income: ₹{income}</Typography>
-      <Typography variant="h6">Total Expenses: ₹{expenseTotal}</Typography>
+    <Container maxWidth="lg">
+      <Box sx={{ pt: 8, pb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom>
+          Dashboard
+        </Typography>
+        <Typography variant="h6" color="textSecondary">
+          Total Income: ₹{income}
+        </Typography>
+        <Typography variant="h6" color="textSecondary">
+          Total Expenses: ₹{expenseTotal}
+        </Typography>
+      </Box>
 
-      <Box mt={4}>
-        <Typography variant="h6">Recent Income</Typography>
-        <List>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Recent Income
+        </Typography>
+        <Grid container spacing={3}>
           {recentIncome.map((item, index) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={item.Description}
-                secondary={`₹${item.Amount}`}
-              />
-            </ListItem>
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    {item.Description}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    ₹{item.Amount}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </List>
+        </Grid>
       </Box>
 
-      <Box mt={4}>
-        <Typography variant="h6">Recent Expenses</Typography>
-        <List>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Recent Expenses
+        </Typography>
+        <Grid container spacing={3}>
           {recentExpenses.map((item, index) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={item.Description}
-                secondary={`₹${item.Amount}`}
-              />
-            </ListItem>
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    {item.Description}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    ₹{item.Amount}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </List>
+        </Grid>
       </Box>
 
-      <Box mt={2}>
-        <Button variant="contained" color="primary" href="/add">
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Button variant="contained" color="primary" href="/add" sx={{ mr: 2 }}>
           Add Expense
         </Button>
         <Button variant="contained" color="secondary" href="/manage">
