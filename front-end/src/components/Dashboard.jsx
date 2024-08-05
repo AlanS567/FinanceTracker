@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, Box, List, ListItem, ListItemText } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import axios from "axios";
 
 const Dashboard = () => {
   const [expenses, setExpenses] = useState([]);
@@ -10,13 +18,15 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('http://localhost:1880/view_expense', {
-          params: { email: 'user-email' } // Replace with the actual email or retrieve from state
+        const response = await axios.get("http://localhost:1880/view_expense", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          }, // Replace with the actual email or retrieve from state
         });
         setExpenses(response.data);
         calculateTotals(response.data);
       } catch (error) {
-        console.error('Failed to fetch expenses', error);
+        console.error("Failed to fetch expenses", error);
       }
     };
 
@@ -24,20 +34,31 @@ const Dashboard = () => {
   }, []);
 
   const calculateTotals = (data) => {
-    const totalIncome = data.filter(item => item.Category === 'Income').reduce((acc, item) => acc + item.Amount, 0);
-    const totalExpense = data.filter(item => item.Category === 'Expense').reduce((acc, item) => acc + item.Amount, 0);
+    const totalIncome = data
+      .filter((item) => item.Category === "Income")
+      .reduce((acc, item) => acc + item.Amount, 0);
+    const totalExpense = data
+      .filter((item) => item.Category === "Expense")
+      .reduce((acc, item) => acc + item.Amount, 0);
 
     setIncome(totalIncome);
     setExpenseTotal(totalExpense);
   };
 
   // Separate recent income and expenses
-  const recentIncome = expenses.filter(item => item.Category === 'Income').slice(-5).reverse();
-  const recentExpenses = expenses.filter(item => item.Category === 'Expense').slice(-5).reverse();
+  const recentIncome = expenses
+    .filter((item) => item.Category === "Income")
+    .slice(-5)
+    .reverse();
+  const recentExpenses = expenses
+    .filter((item) => item.Category === "Expense")
+    .slice(-5)
+    .reverse();
 
   return (
     <Container>
-      <br /><br />
+      <br />
+      <br />
       <Typography variant="h6">Total Income: ₹{income}</Typography>
       <Typography variant="h6">Total Expenses: ₹{expenseTotal}</Typography>
 
@@ -46,7 +67,10 @@ const Dashboard = () => {
         <List>
           {recentIncome.map((item, index) => (
             <ListItem key={index}>
-              <ListItemText primary={item.Description} secondary={`₹${item.Amount}`} />
+              <ListItemText
+                primary={item.Description}
+                secondary={`₹${item.Amount}`}
+              />
             </ListItem>
           ))}
         </List>
@@ -57,15 +81,22 @@ const Dashboard = () => {
         <List>
           {recentExpenses.map((item, index) => (
             <ListItem key={index}>
-              <ListItemText primary={item.Description} secondary={`₹${item.Amount}`} />
+              <ListItemText
+                primary={item.Description}
+                secondary={`₹${item.Amount}`}
+              />
             </ListItem>
           ))}
         </List>
       </Box>
 
       <Box mt={2}>
-        <Button variant="contained" color="primary" href="/add">Add Expense</Button>
-        <Button variant="contained" color="secondary" href="/manage">Manage Expenses</Button>
+        <Button variant="contained" color="primary" href="/add">
+          Add Expense
+        </Button>
+        <Button variant="contained" color="secondary" href="/manage">
+          Manage Expenses
+        </Button>
       </Box>
     </Container>
   );

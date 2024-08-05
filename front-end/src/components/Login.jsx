@@ -1,30 +1,36 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Container, TextField, Button, Typography, Box } from "@mui/material";
 
 const Login = ({ setIsLoggedIn, setIsAdminLoggedIn }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:1880/login', { Email: email, Password: password });
-      if (response.data.status === 'ok') {
+      const response = await axios.post("http://localhost:1880/login", {
+        Email: email,
+        Password: password,
+      });
+      if (response.data.status === "ok") {
+        localStorage.setItem("token", response.data.token);
         setIsLoggedIn(true);
-        if (email === 'admin567@gmail.com' && password === 'admin567') {
-          setIsAdminLoggedIn(true);
+        if (email === "admin567@gmail.com" && password === "admin567") {
+          // setIsAdminLoggedIn(true);
+          navigate("/admindash");
+        } else {
+          navigate("/dashboard");
         }
-        navigate('/dashboard');
       } else {
         setError(response.data.message);
       }
     } catch (error) {
       console.error(error);
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -32,14 +38,14 @@ const Login = ({ setIsLoggedIn, setIsAdminLoggedIn }) => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           marginTop: 8,
           padding: 3,
           borderRadius: 2,
           boxShadow: 3,
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
         }}
       >
         <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
@@ -74,7 +80,11 @@ const Login = ({ setIsLoggedIn, setIsAdminLoggedIn }) => {
         >
           Login
         </Button>
-        {error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
+        {error && (
+          <Typography color="error" sx={{ marginTop: 2 }}>
+            {error}
+          </Typography>
+        )}
       </Box>
     </Container>
   );

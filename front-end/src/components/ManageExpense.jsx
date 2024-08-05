@@ -1,27 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Typography, List, ListItem, ListItemText, Button, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
 
 const ManageExpense = () => {
   const [expenses, setExpenses] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const [updatedAmount, setUpdatedAmount] = useState('');
-  const [updatedCategory, setUpdatedCategory] = useState('');
-  const [updatedDate, setUpdatedDate] = useState('');
-  const [updatedDescription, setUpdatedDescription] = useState('');
+  const [updatedAmount, setUpdatedAmount] = useState("");
+  const [updatedCategory, setUpdatedCategory] = useState("");
+  const [updatedDate, setUpdatedDate] = useState("");
+  const [updatedDescription, setUpdatedDescription] = useState("");
 
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const email = 'user@example.com'; // Replace this with dynamic email or user info
-        const response = await axios.get('http://localhost:1880/view_expense', {
-          params: { email }
+        const email = "user@example.com"; // Replace this with dynamic email or user info
+        const response = await axios.get("http://localhost:1880/view_expense", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
         });
         setExpenses(response.data);
       } catch (error) {
-        console.error('Error fetching expenses:', error);
+        console.error("Error fetching expenses:", error);
       }
     };
 
@@ -31,9 +46,9 @@ const ManageExpense = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:1880/remove_expense/${id}`);
-      setExpenses(expenses.filter(expense => expense._id !== id));
+      setExpenses(expenses.filter((expense) => expense._id !== id));
     } catch (error) {
-      console.error('Error deleting expense:', error);
+      console.error("Error deleting expense:", error);
     }
   };
 
@@ -53,25 +68,39 @@ const ManageExpense = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:1880/update_expense/${selectedExpense._id}`, {
-        Amount: updatedAmount,
-        Category: updatedCategory,
-        Date: updatedDate,
-        Description: updatedDescription,
-        Email: selectedExpense.Email
-      });
-      setExpenses(expenses.map(expense => 
-        expense._id === selectedExpense._id ? { ...expense, Amount: updatedAmount, Category: updatedCategory, Date: updatedDate, Description: updatedDescription } : expense
-      ));
+      await axios.put(
+        `http://localhost:1880/update_expense/${selectedExpense._id}`,
+        {
+          Amount: updatedAmount,
+          Category: updatedCategory,
+          Date: updatedDate,
+          Description: updatedDescription,
+          // Email: selectedExpense.Email,
+        }
+      );
+      setExpenses(
+        expenses.map((expense) =>
+          expense._id === selectedExpense._id
+            ? {
+                ...expense,
+                Amount: updatedAmount,
+                Category: updatedCategory,
+                Date: updatedDate,
+                Description: updatedDescription,
+              }
+            : expense
+        )
+      );
       handleCloseDialog();
     } catch (error) {
-      console.error('Error updating expense:', error);
+      console.error("Error updating expense:", error);
     }
   };
 
   return (
     <Container>
-      <br /><br />
+      <br />
+      <br />
       <Typography variant="h4" gutterBottom>
         Manage Expenses
       </Typography>
